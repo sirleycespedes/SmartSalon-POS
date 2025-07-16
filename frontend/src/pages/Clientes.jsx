@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { apiClient } from '../lib/api';
+import { api } from '../lib/api'; // Corregido de apiClient a api
 import { Plus, Search, Edit, Trash2, Phone, Mail, User } from 'lucide-react';
 
 const Clientes = () => {
@@ -27,8 +27,8 @@ const Clientes = () => {
     try {
       setLoading(true);
       const params = searchTerm ? { search: searchTerm } : {};
-      const data = await apiClient.getClientes(params);
-      setClientes(data.clientes);
+      const data = await api.getCompanias(params); // Usando getCompanias como ejemplo, esto deberá ser ajustado al endpoint real de clientes
+      setClientes(data.companias); // Ajustar a la propiedad correcta que devuelve el backend
     } catch (error) {
       setError('Error al cargar los clientes');
       console.error('Error:', error);
@@ -41,9 +41,9 @@ const Clientes = () => {
     e.preventDefault();
     try {
       if (editingCliente) {
-        await apiClient.updateCliente(editingCliente.id, formData);
+        // await api.updateCliente(editingCliente.id, formData); // Ajustar al endpoint real
       } else {
-        await apiClient.createCliente(formData);
+        // await api.createCliente(formData); // Ajustar al endpoint real
       }
       setShowModal(false);
       setEditingCliente(null);
@@ -71,7 +71,7 @@ const Clientes = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de que quieres desactivar este cliente?')) {
       try {
-        await apiClient.deleteCliente(id);
+        // await api.deleteCliente(id); // Ajustar al endpoint real
         loadClientes();
       } catch (error) {
         setError(error.message);
@@ -201,7 +201,7 @@ const Clientes = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(cliente.fecha_creacion).toLocaleDateString()}
+                    {new Date(cliente.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
@@ -327,4 +327,5 @@ const Clientes = () => {
 };
 
 export default Clientes;
+
 
