@@ -25,14 +25,13 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, [token]);
 
-  const login = async (username, password) => {
+  const login = async (email, password) => {
     try {
-      const data = await api.login(username, password);
+      const data = await api.login(email, password);
       if (data.access_token) {
         setToken(data.access_token);
         localStorage.setItem('token', data.access_token);
-        const profile = await api.getProfile(data.access_token);
-        setUser(profile);
+        setUser(data.user); // Usar directamente data.user en lugar de hacer otra petición
         return true;
       } else {
         console.error('Login failed:', data.message);
