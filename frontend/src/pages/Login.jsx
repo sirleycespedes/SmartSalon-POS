@@ -21,10 +21,19 @@ const Login = () => {
     setLoading(true);
     setError('');
 
+    console.log('Attempting login with:', { email, password: '***' });
+
     try {
-      await login(email, password);
-      navigate(from, { replace: true });
+      const success = await login(email, password);
+      console.log('Login result:', success);
+      
+      if (success) {
+        navigate(from, { replace: true });
+      } else {
+        setError('Credenciales inválidas');
+      }
     } catch (error) {
+      console.error('Login error:', error);
       setError(error.message || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
